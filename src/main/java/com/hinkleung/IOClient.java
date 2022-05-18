@@ -1,4 +1,4 @@
-package com.hinkleung.chapter2;
+package com.hinkleung;
 
 import java.io.OutputStream;
 import java.net.Socket;

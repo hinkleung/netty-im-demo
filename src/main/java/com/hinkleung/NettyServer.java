@@ -1,4 +1,4 @@
-package com.hinkleung.chapter2;
+package com.hinkleung;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
