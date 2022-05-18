@@ -1,4 +1,4 @@
-package com.hinkleung;
+package com.hinkleung.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -25,7 +25,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) {
-                        ch.pipeline().addLast(new StringEncoder());
+                        ch.pipeline().addLast(new FirstClientHandler());
                     }
                 });
 
@@ -36,7 +36,8 @@ public class NettyClient {
 //            Thread.sleep(2000);
 //        }
         bootstrap.attr(AttributeKey.newInstance("clientName"), "nettyClient");
-        connect(bootstrap, "jueji1324n.cn", 80, MAX_RETRY);
+        someOption(bootstrap);
+        connect(bootstrap, "localhost", 8000, MAX_RETRY);
     }
 
     private static void connect(Bootstrap bootstrap, String host, int port, int retry) {
