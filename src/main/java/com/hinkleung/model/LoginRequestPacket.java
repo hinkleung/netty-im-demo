@@ -1,13 +1,15 @@
 package com.hinkleung.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import static com.hinkleung.model.Command.LOGIN_REQUEST;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class LoginRequestPacket extends Packet {
 
-    private Integer userId;
+    private String userId;
 
     private String username;
 
