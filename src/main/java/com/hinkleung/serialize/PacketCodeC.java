@@ -1,16 +1,13 @@
 package com.hinkleung.serialize;
 
-import com.hinkleung.model.LoginRequestPacket;
-import com.hinkleung.model.LoginResponsePacket;
-import com.hinkleung.model.Packet;
+import com.hinkleung.model.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.hinkleung.model.Command.LOGIN_REQUEST;
-import static com.hinkleung.model.Command.LOGIN_RESPONSE;
+import static com.hinkleung.model.Command.*;
 
 public class PacketCodeC {
 
@@ -24,6 +21,8 @@ public class PacketCodeC {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
@@ -89,10 +88,13 @@ public class PacketCodeC {
         byteBuf.readBytes(bytes);
         Class<? extends Packet> requestType = getRequestType(command);
         Serializer serializer = getSerializer(serializeAlgorithm);
-        if (requestType != null && serializer != null) {
-            return serializer.deserialize(requestType, bytes);
+        if (requestType == null) {
+            throw new RuntimeException("packet类型识别不存在");
         }
-        return null;
+        if (serializer == null) {
+            throw new RuntimeException("根据serializeAlgorithm找不到对应的Serializer");
+        }
+        return serializer.deserialize(requestType, bytes);
     }
 
     private Serializer getSerializer(byte serializeAlgorithm) {
