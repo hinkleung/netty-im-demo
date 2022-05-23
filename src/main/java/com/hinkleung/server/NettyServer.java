@@ -1,11 +1,11 @@
 package com.hinkleung.server;
 
+import com.hinkleung.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
@@ -21,7 +21,17 @@ public class NettyServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new ServerHandler());
+
+                        // inBound，处理读数据的逻辑链
+                        ch.pipeline().addLast(new InBoundHandlerA());
+                        ch.pipeline().addLast(new InBoundHandlerB());
+                        ch.pipeline().addLast(new InBoundHandlerC());
+
+                        // outBound，处理写数据的逻辑链
+                        ch.pipeline().addLast(new OutBoundHandlerA());
+                        ch.pipeline().addLast(new OutBoundHandlerB());
+                        ch.pipeline().addLast(new OutBoundHandlerC());
+
                     }
                 });
         bind(serverBootstrap, 8000);
