@@ -45,6 +45,20 @@ public class PacketCodeC {
         return byteBuf;
     }
 
+    public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
+        // 1.序列化Java对象
+        byte[] bytes = Serializer.DEFAULT.serialize(packet);
+
+        // 2.实际编码过程
+        byteBuf.writeInt(MAGIC_NUMBER);
+        byteBuf.writeByte(packet.getVersion());
+        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlgorithm());
+        byteBuf.writeByte(packet.getCommand());
+        byteBuf.writeInt(bytes.length);
+        byteBuf.writeBytes(bytes);
+        return byteBuf;
+    }
+
     /**
      * 编码：封装成二进制
      *

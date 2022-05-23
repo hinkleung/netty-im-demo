@@ -1,4 +1,4 @@
-package com.hinkleung.server.handler;
+package com.hinkleung.server.handler.demo;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

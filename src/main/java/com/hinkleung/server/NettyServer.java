@@ -1,5 +1,7 @@
 package com.hinkleung.server;
 
+import com.hinkleung.serialize.PacketDecoder;
+import com.hinkleung.serialize.PacketEncoder;
 import com.hinkleung.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -21,16 +23,10 @@ public class NettyServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
-
-                        // inBound，处理读数据的逻辑链
-                        ch.pipeline().addLast(new InBoundHandlerA());
-                        ch.pipeline().addLast(new InBoundHandlerB());
-                        ch.pipeline().addLast(new InBoundHandlerC());
-
-                        // outBound，处理写数据的逻辑链
-                        ch.pipeline().addLast(new OutBoundHandlerA());
-                        ch.pipeline().addLast(new OutBoundHandlerB());
-                        ch.pipeline().addLast(new OutBoundHandlerC());
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginRequestHandler());
+                        ch.pipeline().addLast(new MessageRequestHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
 
                     }
                 });

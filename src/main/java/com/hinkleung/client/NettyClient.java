@@ -1,7 +1,11 @@
 package com.hinkleung.client;
 
+import com.hinkleung.client.handler.LoginResponseHandler;
+import com.hinkleung.client.handler.MessageResponseHandler;
 import com.hinkleung.model.MessageRequestPacket;
 import com.hinkleung.serialize.PacketCodeC;
+import com.hinkleung.serialize.PacketDecoder;
+import com.hinkleung.serialize.PacketEncoder;
 import com.hinkleung.utils.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -11,7 +15,6 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.AttributeKey;
 
 import java.util.Date;
@@ -38,6 +41,10 @@ public class NettyClient {
                     @Override
                     protected void initChannel(Channel ch) {
                         ch.pipeline().addLast(new ClientHandler());
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginResponseHandler());
+                        ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
 

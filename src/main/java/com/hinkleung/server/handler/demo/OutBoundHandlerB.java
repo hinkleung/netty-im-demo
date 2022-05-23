@@ -1,13 +1,13 @@
-package com.hinkleung.server.handler;
+package com.hinkleung.server.handler.demo;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 
-public class OutBoundHandlerA extends ChannelOutboundHandlerAdapter {
+public class OutBoundHandlerB extends ChannelOutboundHandlerAdapter {
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        System.out.println("OutBoundHandlerA: " + msg);
+        System.out.println("OutBoundHandlerB: " + msg);
         super.write(ctx, msg, promise);
     }
 }

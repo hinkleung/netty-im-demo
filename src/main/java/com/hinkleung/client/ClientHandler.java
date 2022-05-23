@@ -26,32 +26,29 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         loginRequestPacket.setPassword("pwd");
 
         // 编码
-        ByteBuf buffer = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginRequestPacket);
+//        ByteBuf buffer = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginRequestPacket);
 
         // 写数据
-        ctx.channel().writeAndFlush(buffer);
+        ctx.channel().writeAndFlush(loginRequestPacket);
     }
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf byteBuf = (ByteBuf) msg;
-
-        Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);
-
-        if (packet instanceof LoginResponsePacket) {
-            LoginResponsePacket loginResponsePacket = (LoginResponsePacket) packet;
-            if (loginResponsePacket.isSuccess()) {
-                LoginUtil.markAsLogin(ctx.channel());
-                System.out.println(new Date() + ":客户端登录成功");
-            } else {
-                System.out.println(new Date() + ":客户端登录失败，原因:" + loginResponsePacket.getReason());
-            }
-        } else if (packet instanceof MessageResponsePacket) {
-            MessageResponsePacket messageResponsePacket = (MessageResponsePacket) packet;
-            System.out.println(new Date() + ": 收到服务端的消息: " + messageResponsePacket.getMessage());
-        }
-
-
-
-    }
+//    @Override
+//    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+//        ByteBuf byteBuf = (ByteBuf) msg;
+//
+//        Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);
+//
+//        if (packet instanceof LoginResponsePacket) {
+//            LoginResponsePacket loginResponsePacket = (LoginResponsePacket) packet;
+//            if (loginResponsePacket.isSuccess()) {
+//                LoginUtil.markAsLogin(ctx.channel());
+//                System.out.println(new Date() + ":客户端登录成功");
+//            } else {
+//                System.out.println(new Date() + ":客户端登录失败，原因:" + loginResponsePacket.getReason());
+//            }
+//        } else if (packet instanceof MessageResponsePacket) {
+//            MessageResponsePacket messageResponsePacket = (MessageResponsePacket) packet;
+//            System.out.println(new Date() + ": 收到服务端的消息: " + messageResponsePacket.getMessage());
+//        }
+//    }
 }
