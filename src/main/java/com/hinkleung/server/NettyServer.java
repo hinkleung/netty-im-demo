@@ -3,13 +3,14 @@ package com.hinkleung.server;
 import com.hinkleung.serialize.PacketDecoder;
 import com.hinkleung.serialize.PacketEncoder;
 import com.hinkleung.serialize.Spliter;
-import com.hinkleung.server.handler.*;
+import com.hinkleung.server.handler.LifeCyCleTestHandler;
+import com.hinkleung.server.handler.LoginRequestHandler;
+import com.hinkleung.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
@@ -25,6 +26,7 @@ public class NettyServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
+                        ch.pipeline().addLast(new LifeCyCleTestHandler());
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
