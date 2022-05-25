@@ -2,34 +2,48 @@ package com.hinkleung.server.handler;
 
 import com.hinkleung.model.LoginRequestPacket;
 import com.hinkleung.model.LoginResponsePacket;
-import com.hinkleung.utils.LoginUtil;
+import com.hinkleung.model.session.Session;
+import com.hinkleung.utils.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) throws Exception {
-        System.out.println(new Date() + ": 收到客户端登录请求……");
-
+    protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) {
         LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
         loginResponsePacket.setVersion(loginRequestPacket.getVersion());
+        loginResponsePacket.setUsername(loginRequestPacket.getUsername());
+
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
-            LoginUtil.markAsLogin(ctx.channel());
-            System.out.println(new Date() + ": 登录成功!");
+            String userId = randomUserId();
+            loginResponsePacket.setUserId(userId);
+            System.out.println("[" + loginRequestPacket.getUsername() + "]登录成功");
+            SessionUtil.bindSession(new Session(userId, loginRequestPacket.getUsername()), ctx.channel());
         } else {
-            loginResponsePacket.setSuccess(false);
             loginResponsePacket.setReason("账号密码校验失败");
+            loginResponsePacket.setSuccess(false);
             System.out.println(new Date() + ": 登录失败!");
         }
+
         // 登录响应
         ctx.channel().writeAndFlush(loginResponsePacket);
     }
 
     private boolean valid(LoginRequestPacket loginRequestPacket) {
         return true;
+    }
+
+    private static String randomUserId() {
+        return UUID.randomUUID().toString().split("-")[0];
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        SessionUtil.unBindSession(ctx.channel());
     }
 }

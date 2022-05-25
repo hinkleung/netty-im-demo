@@ -2,12 +2,14 @@ package com.hinkleung.client;
 
 import com.hinkleung.client.handler.LoginResponseHandler;
 import com.hinkleung.client.handler.MessageResponseHandler;
+import com.hinkleung.model.LoginRequestPacket;
 import com.hinkleung.model.MessageRequestPacket;
 import com.hinkleung.serialize.PacketCodeC;
 import com.hinkleung.serialize.PacketDecoder;
 import com.hinkleung.serialize.PacketEncoder;
 import com.hinkleung.serialize.Spliter;
 import com.hinkleung.utils.LoginUtil;
+import com.hinkleung.utils.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -78,20 +80,39 @@ public class NettyClient {
     }
 
     private static void startConsoleThread(Channel channel) {
+        Scanner sc = new Scanner(System.in);
+
         new Thread(() -> {
             while (!Thread.interrupted()) {
-//                if (LoginUtil.hasLogin(channel)) {
-                    System.out.println("输入消息发送至服务端: ");
-                    Scanner sc = new Scanner(System.in);
-                    String line = sc.nextLine();
+                if (!SessionUtil.hasLogin(channel)) {
+                    System.out.print("输入用户名登录: ");
+                    String username = sc.nextLine();
+                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+                    loginRequestPacket.setUsername(username);
 
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMessage(line);
-                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), packet);
-                    channel.writeAndFlush(byteBuf);
-//                }
+                    // 密码使用默认的
+                    loginRequestPacket.setPassword("pwd");
+
+                    // 发送登录数据包
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
+                } else {
+                    System.out.print("输入目标用户id: ");
+                    String toUserId = sc.next();
+                    System.out.print("输入要发送的信息: ");
+                    String message = sc.next();
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                }
             }
         }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void someOption(Bootstrap bootstrap) {
