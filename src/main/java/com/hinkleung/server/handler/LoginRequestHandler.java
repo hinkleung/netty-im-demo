@@ -2,6 +2,7 @@ package com.hinkleung.server.handler;
 
 import com.hinkleung.model.LoginRequestPacket;
 import com.hinkleung.model.LoginResponsePacket;
+import com.hinkleung.utils.LoginUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -17,6 +18,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         loginResponsePacket.setVersion(loginRequestPacket.getVersion());
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
+            LoginUtil.markAsLogin(ctx.channel());
             System.out.println(new Date() + ": 登录成功!");
         } else {
             loginResponsePacket.setSuccess(false);

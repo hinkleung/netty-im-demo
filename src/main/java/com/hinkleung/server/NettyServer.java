@@ -3,6 +3,7 @@ package com.hinkleung.server;
 import com.hinkleung.serialize.PacketDecoder;
 import com.hinkleung.serialize.PacketEncoder;
 import com.hinkleung.serialize.Spliter;
+import com.hinkleung.server.handler.AuthHandler;
 import com.hinkleung.server.handler.LifeCyCleTestHandler;
 import com.hinkleung.server.handler.LoginRequestHandler;
 import com.hinkleung.server.handler.MessageRequestHandler;
@@ -30,6 +31,8 @@ public class NettyServer {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
+                        // 新增加用户认证handler
+                        ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
 
