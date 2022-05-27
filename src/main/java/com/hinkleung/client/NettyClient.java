@@ -6,7 +6,7 @@ import com.hinkleung.model.console.LoginConsoleCommand;
 import com.hinkleung.serialize.PacketDecoder;
 import com.hinkleung.serialize.PacketEncoder;
 import com.hinkleung.serialize.Spliter;
-import com.hinkleung.server.handler.JoinGroupResponseHandler;
+import com.hinkleung.server.handler.IMIdleStateHandler;
 import com.hinkleung.utils.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -40,6 +40,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) {
+                        ch.pipeline().addLast(new IMIdleStateHandler());
                         ch.pipeline().addLast(new Spliter());
 //                        ch.pipeline().addLast(new ClientHandler());
                         ch.pipeline().addLast(new PacketDecoder());
@@ -49,8 +50,10 @@ public class NettyClient {
                         ch.pipeline().addLast(new JoinGroupResponseHandler());
                         ch.pipeline().addLast(new QuitGroupResponseHandler());
                         ch.pipeline().addLast(new ListGroupMembersResponseHandler());
+                        ch.pipeline().addLast(new GroupMessageResponseHandler());
                         ch.pipeline().addLast(new LogoutResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
+                        ch.pipeline().addLast(new HeartBeatTimerHandler());
                     }
                 });
 
