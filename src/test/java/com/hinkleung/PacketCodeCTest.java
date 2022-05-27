@@ -1,6 +1,6 @@
 package com.hinkleung;
 
-import com.hinkleung.model.LoginRequestPacket;
+import com.hinkleung.model.request.LoginRequestPacket;
 import com.hinkleung.model.Packet;
 import com.hinkleung.serialize.JSONSerializer;
 import com.hinkleung.serialize.PacketCodeC;

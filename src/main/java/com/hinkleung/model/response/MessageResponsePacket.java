@@ -1,5 +1,6 @@
-package com.hinkleung.model;
+package com.hinkleung.model.response;
 
+import com.hinkleung.model.Packet;
 import lombok.Data;
 
 import static com.hinkleung.model.Command.MESSAGE_RESPONSE;

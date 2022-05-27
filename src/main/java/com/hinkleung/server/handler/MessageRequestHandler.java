@@ -1,14 +1,20 @@
 package com.hinkleung.server.handler;
 
-import com.hinkleung.model.MessageRequestPacket;
-import com.hinkleung.model.MessageResponsePacket;
+import com.hinkleung.model.request.MessageRequestPacket;
+import com.hinkleung.model.response.MessageResponsePacket;
 import com.hinkleung.model.session.Session;
 import com.hinkleung.utils.SessionUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+@ChannelHandler.Sharable
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
+
+    public static final MessageRequestHandler INSTANCE = new MessageRequestHandler();
+
+    protected MessageRequestHandler() {}
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket messageRequestPacket) throws Exception {

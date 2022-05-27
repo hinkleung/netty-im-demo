@@ -1,12 +1,6 @@
 package com.hinkleung.client;
 
-import com.hinkleung.model.LoginRequestPacket;
-import com.hinkleung.model.LoginResponsePacket;
-import com.hinkleung.model.MessageResponsePacket;
-import com.hinkleung.model.Packet;
-import com.hinkleung.serialize.PacketCodeC;
-import com.hinkleung.utils.LoginUtil;
-import io.netty.buffer.ByteBuf;
+import com.hinkleung.model.request.LoginRequestPacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 

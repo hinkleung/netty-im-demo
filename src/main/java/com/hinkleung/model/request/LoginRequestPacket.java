@@ -1,5 +1,6 @@
-package com.hinkleung.model;
+package com.hinkleung.model.request;
 
+import com.hinkleung.model.Packet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

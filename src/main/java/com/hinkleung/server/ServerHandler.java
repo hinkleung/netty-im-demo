@@ -1,6 +1,10 @@
 package com.hinkleung.server;
 
 import com.hinkleung.model.*;
+import com.hinkleung.model.request.LoginRequestPacket;
+import com.hinkleung.model.request.MessageRequestPacket;
+import com.hinkleung.model.response.LoginResponsePacket;
+import com.hinkleung.model.response.MessageResponsePacket;
 import com.hinkleung.serialize.PacketCodeC;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

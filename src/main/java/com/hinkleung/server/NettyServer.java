@@ -1,12 +1,10 @@
 package com.hinkleung.server;
 
+import com.hinkleung.serialize.PacketCodecHandler;
 import com.hinkleung.serialize.PacketDecoder;
 import com.hinkleung.serialize.PacketEncoder;
 import com.hinkleung.serialize.Spliter;
-import com.hinkleung.server.handler.AuthHandler;
-import com.hinkleung.server.handler.LifeCyCleTestHandler;
-import com.hinkleung.server.handler.LoginRequestHandler;
-import com.hinkleung.server.handler.MessageRequestHandler;
+import com.hinkleung.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -29,12 +27,20 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) {
 //                        ch.pipeline().addLast(new LifeCyCleTestHandler());
                         ch.pipeline().addLast(new Spliter());
-                        ch.pipeline().addLast(new PacketDecoder());
-                        ch.pipeline().addLast(new LoginRequestHandler());
-                        // 新增加用户认证handler
-                        ch.pipeline().addLast(new AuthHandler());
-                        ch.pipeline().addLast(new MessageRequestHandler());
-                        ch.pipeline().addLast(new PacketEncoder());
+//                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
+                        ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                        ch.pipeline().addLast(AuthHandler.INSTANCE);
+                        ch.pipeline().addLast(IMHandler.INSTANCE);
+
+//                        ch.pipeline().addLast(CreateGroupRequestHandler.INSTANCE);
+//                        ch.pipeline().addLast(MessageRequestHandler.INSTANCE);
+//                        ch.pipeline().addLast(JoinGroupRequestHandler.INSTANCE);
+//                        ch.pipeline().addLast(QuitGroupRequestHandler.INSTANCE);
+//                        ch.pipeline().addLast(ListGroupMembersRequestHandler.INSTANCE);
+//                        ch.pipeline().addLast(LogoutRequestHandler.INSTANCE);
+//                        ch.pipeline().addLast(GroupMessageRequestHandler.INSTANCE);
+//                        ch.pipeline().addLast(new PacketEncoder());
 
                     }
                 });

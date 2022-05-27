@@ -1,16 +1,24 @@
 package com.hinkleung.server.handler;
 
-import com.hinkleung.model.LoginRequestPacket;
-import com.hinkleung.model.LoginResponsePacket;
+import com.hinkleung.model.request.LoginRequestPacket;
+import com.hinkleung.model.response.LoginResponsePacket;
 import com.hinkleung.model.session.Session;
 import com.hinkleung.utils.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.Date;
 import java.util.UUID;
 
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    // 2. 构造单例
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    protected LoginRequestHandler() {
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) {

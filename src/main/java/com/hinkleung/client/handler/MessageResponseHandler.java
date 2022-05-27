@@ -1,6 +1,6 @@
 package com.hinkleung.client.handler;
 
-import com.hinkleung.model.MessageResponsePacket;
+import com.hinkleung.model.response.MessageResponsePacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
